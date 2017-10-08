@@ -16,14 +16,14 @@ app.use(express.static(publicPath));
 io.on('connection', (socket)=>{
   console.log('new connection established');
 
-  socket.emit('welcome', messageGenerator('admin', 'Welcome to the chat group'));
+  socket.emit('newMessage', messageGenerator('admin', 'Welcome to the chat group'));
 
 
-  socket.broadcast.emit('newUser', messageGenerator('admin', 'A new user has joined') );
+  socket.broadcast.emit('newMessage', messageGenerator('admin', 'A new user has joined') );
 
  socket.on('createMessage', (message)=>{
     console.log('Create Message', message);
-    socket.broadcast.emit('newMessage', messageGenerator(message.from, message.text));
+    io.emit('newMessage', messageGenerator(message.from, message.text));
   })
 
   socket.on('disconnect', ()=>{
